@@ -12,15 +12,23 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
+        
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
+      - name: Deploy Files via SCP
+        run: scp -i private_key -o StrictHostKeyChecking=no -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            scp -i ${{ secrets.SSH_KEY }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
+            scp -i private_key -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
             # Add any build or restart commands here, e.g.:
             # npm install
             # systemctl restart your-service
