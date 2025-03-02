@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            scp ${{ secrets.SSH_KEY }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
+            scp -i ${{ secrets.SSH_KEY }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
             # Add any build or restart commands here, e.g.:
             # npm install
             # systemctl restart your-service
