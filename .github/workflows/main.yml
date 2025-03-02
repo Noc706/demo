@@ -13,8 +13,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+
       - name: Deploy Files via SCP
-        run: scp -i ${{ secrets.SSH_PRIVATE_KEY }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
-            # Add any build or restart commands here, e.g.:
-            # npm install
-            # systemctl restart your-service
+        run: scp -i private_key -o StrictHostKeyChecking=no -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
+            
+      # Add any build or restart commands here, e.g.:
+      # - name: Install dependencies
+      #   run: ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /root/demo && npm install"
+      # - name: Restart service
+      #   run: ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo systemctl restart your-service"
