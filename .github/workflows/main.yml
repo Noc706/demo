@@ -23,6 +23,6 @@ jobs:
       - name: Deploy to server
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /root
+            cd /root/demo
             git pull origin main
           EOF
