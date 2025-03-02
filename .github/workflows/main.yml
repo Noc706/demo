@@ -19,9 +19,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }} # Default is 22
           script: |
-            scp -P ${{ secrets.SSH_PORT }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
+            scp ${{ secrets.SSH_KEY }} -r ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/demo
             # Add any build or restart commands here, e.g.:
             # npm install
             # systemctl restart your-service
